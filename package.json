@@ -1,0 +1,19 @@
+{
+  "name": "snekjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/irwiss/snekjs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/irwiss/snekjs/issues"
+  },
+  "homepage": "https://github.com/irwiss/snekjs#readme"
+}

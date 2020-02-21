@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SnekJS</title>
+        <style>
+            * { margin: 0; padding: 0; }
+            
+            body, html {
+                font-family: 'Comic Sans MS';
+                height: 100%;
+                display: grid;
+                background-color: #000;
+            }
+
+            #snek {
+                background: #ccc;
+                margin: auto;
+                width: 600px;
+                height: 600px;
+                border: 1px #000 solid;
+            }
+
+            #food {
+                border: 1px #000 solid;
+                position: absolute;
+                width: 22px;
+                height: 22px;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .snekpart {
+                border: 1px #000 solid;
+                position: absolute;
+                width: 22px;
+                height: 22px;
+                text-align: center;
+                vertical-align: middle;
+                font-size: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="snek">
+            <div id="food">🍕</div>
+        </div>
+        <script src="out/snake.js"></script>
+    </body>
+</html>
