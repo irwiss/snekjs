@@ -128,6 +128,8 @@ class SnekMap {
         this.initSnek();
         this.drawSnek();
         this.setSpeed(200);
+        
+        this.scoreAmount = 0;
         this.updateScore();
     }
 
