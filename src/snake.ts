@@ -46,7 +46,10 @@ class SnekMap {
 
     private move() {
         let self = map;
-        if (self.direction == SnekDirection.Invalid) { return; }
+        if (self.direction == SnekDirection.Invalid) {
+            self.drawSnek();
+            return;
+        }
        
         let tail = self.snek.pop();
         let head = self.snek[0];
@@ -216,7 +219,10 @@ class SnekMap {
                 p.el.className = 'snekpart mid' + reverse;
             }
 
-
+            let pos = this.calcPosition(this.foodX, this.foodY);
+            this.food.style.top = pos.y + 'px';
+            this.food.style.left = pos.x + 'px';
+    
             this.movePart(p);
         }
     }
@@ -226,10 +232,6 @@ class SnekMap {
             this.foodX = Math.floor(Math.random() * this.fieldSize);
             this.foodY = Math.floor(Math.random() * this.fieldSize); 
         } while (this.snek.find(p => p.x == this.foodX && p.y == this.foodY) != null);
-
-        let pos = this.calcPosition(this.foodX, this.foodY);
-        this.food.style.top = pos.y + 'px';
-        this.food.style.left = pos.x + 'px';
     }
 }
 
