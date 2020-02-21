@@ -17,6 +17,8 @@ class SnekMap {
     food: HTMLElement;
     snek: SnekPart[] = [];
     direction: SnekDirection = SnekDirection.Invalid;
+    prevDirection: SnekDirection = SnekDirection.Invalid;
+    timer: number;
     
     constructor() {
         let snekMap = document.getElementById('snek');
@@ -32,7 +34,6 @@ class SnekMap {
         this.die();
 
         window.onkeydown = this.handle_input;
-        setInterval(this.move, 200);
     }
 
     private move() {
@@ -61,8 +62,9 @@ class SnekMap {
                 tail.x = head.x; tail.y = head.y + 1;
                 break;
         }
+        self.prevDirection = self.direction;
         
-        head.el.innerHTML = head.x + ':' + head.y;
+        head.el.innerHTML = '=';
         tail.el.innerHTML = 'H';
 
         if (tail.x < 0 || tail.x > self.fieldSize - 1 ||
@@ -79,7 +81,7 @@ class SnekMap {
                 y: oldTailY,
                 el: el
             };
-    
+
             el.className = 'snekpart';
             el.innerHTML = '=';
             
@@ -96,38 +98,46 @@ class SnekMap {
         }
 
         self.drawSnek();
+        self.setSpeed(200 - self.snek.length * 2);
     }
 
     private die() {
+        this.prevDirection  = SnekDirection.Invalid;
         this.direction = SnekDirection.Invalid;
         this.randomFood();
         this.initSnek();
         this.drawSnek();
+        this.setSpeed(200);
+    }
+
+    private setSpeed(speed: number) {
+        clearInterval(this.timer);
+        this.timer = setInterval(this.move, speed);
     }
 
     private handle_input(ev: KeyboardEvent) {
         switch (ev.keyCode) {
-            case 38:
-            case 87:
-                if (map.direction != SnekDirection.Down) {
+            case 38: // up arrow
+            case 87: // w
+                if (map.prevDirection != SnekDirection.Down) {
                     map.direction =  SnekDirection.Up;
                 }
                 break;
-            case 40:
-            case 83:
-                if (map.direction != SnekDirection.Up) {
+            case 40: // down arrow
+            case 83: // s
+                if (map.prevDirection != SnekDirection.Up) {
                     map.direction = SnekDirection.Down;
                 }
                 break;
-            case 37:
-            case 65:
-                if (map.direction != SnekDirection.Right) {
+            case 37: // left arrow
+            case 65: // a
+                if (map.prevDirection != SnekDirection.Right) {
                     map.direction = SnekDirection.Left;
                 }
                 break;
-            case 39:
-            case 68:
-                if (map.direction != SnekDirection.Left) {
+            case 39: // right arrow
+            case 68: // d
+                if (map.prevDirection != SnekDirection.Left && map.prevDirection != SnekDirection.Invalid) {
                     map.direction = SnekDirection.Right;
                 }
                 break;
@@ -150,7 +160,7 @@ class SnekMap {
             };
     
             el.className = 'snekpart';
-            el.innerHTML = i.toString();
+            el.innerHTML = i == 0 ? 'H' : '=';
             
             this.map.appendChild(el);
             this.snek.push(p);
