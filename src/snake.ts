@@ -67,11 +67,11 @@ class SnekMap {
         head.el.innerHTML = '=';
         tail.el.innerHTML = 'H';
 
-        if (tail.x < 0 || tail.x > self.fieldSize - 1 ||
-            tail.y < 0 || tail.y > self.fieldSize - 1) {
-            self.die();
-        }
-        
+        if (tail.x < 0) { tail.x = self.fieldSize - 1; }
+        if (tail.y < 0) { tail.y = self.fieldSize - 1; }
+        if (tail.x > self.fieldSize - 1) { tail.x = 0; }
+        if (tail.y > self.fieldSize - 1) { tail.y = 0; }
+
         if (tail.x == self.foodX && tail.y == self.foodY) {
             self.randomFood();
             let el = document.createElement("div");
@@ -190,8 +190,10 @@ class SnekMap {
     }
 
     public randomFood() {
-        this.foodX = Math.floor(Math.random() * this.fieldSize);
-        this.foodY = Math.floor(Math.random() * this.fieldSize);
+        do {
+            this.foodX = Math.floor(Math.random() * this.fieldSize);
+            this.foodY = Math.floor(Math.random() * this.fieldSize); 
+        } while (this.snek.find(p => p.x == this.foodX && p.y == this.foodY) != null);
 
         let pos = this.calcPosition(this.foodX, this.foodY);
         this.food.style.top = pos.y + 'px';
