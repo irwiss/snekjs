@@ -2,6 +2,7 @@ interface SnekPart {
     x: number;
     y: number;
     el: HTMLElement;
+    dir: SnekDirection;
 }
 
 enum SnekDirection { Invalid, Up, Left, Down, Right }
@@ -15,6 +16,8 @@ class SnekMap {
     foodY: number;
     map: HTMLElement;
     food: HTMLElement;
+    score: HTMLElement;
+    scoreAmount: number = 0;
     snek: SnekPart[] = [];
     direction: SnekDirection = SnekDirection.Invalid;
     prevDirection: SnekDirection = SnekDirection.Invalid;
@@ -24,6 +27,11 @@ class SnekMap {
         let snekMap = document.getElementById('snek');
         if (snekMap != null) {
             this.map = snekMap;
+        }
+        
+        let score = document.getElementById('score');
+        if (score != null) {
+            this.score = score;
         }
 
         let foodEl = document.getElementById('food');
@@ -62,11 +70,9 @@ class SnekMap {
                 tail.x = head.x; tail.y = head.y + 1;
                 break;
         }
+        tail.dir = self.direction;
         self.prevDirection = self.direction;
         
-        head.el.innerHTML = '=';
-        tail.el.innerHTML = 'H';
-
         if (tail.x < 0) { tail.x = self.fieldSize - 1; }
         if (tail.y < 0) { tail.y = self.fieldSize - 1; }
         if (tail.x > self.fieldSize - 1) { tail.x = 0; }
@@ -79,14 +85,17 @@ class SnekMap {
             let p = {
                 x: oldTailX,
                 y: oldTailY,
-                el: el
+                el: el,
+                dir: self.direction,
             };
 
             el.className = 'snekpart';
-            el.innerHTML = '=';
             
             self.map.appendChild(el);
             self.snek.push(p);
+
+            self.scoreAmount++;
+            self.updateScore();
         }
 
         let tail2 = tail;
@@ -101,6 +110,14 @@ class SnekMap {
         self.setSpeed(200 - self.snek.length * 2);
     }
 
+    private updateScore() {
+        let maxSpeed = 200 - 3 * 2;
+        let speed = 200 - this.snek.length * 2;
+        let speedPercent = Math.round(maxSpeed / speed * 100);
+
+        this.score.innerHTML = 'Score: ' + this.scoreAmount + ' Speed: ' + speedPercent + '%';
+    }
+
     private die() {
         this.prevDirection  = SnekDirection.Invalid;
         this.direction = SnekDirection.Invalid;
@@ -108,6 +125,7 @@ class SnekMap {
         this.initSnek();
         this.drawSnek();
         this.setSpeed(200);
+        this.updateScore();
     }
 
     private setSpeed(speed: number) {
@@ -156,12 +174,10 @@ class SnekMap {
             let p = {
                 x: Math.floor(600 / 24 / 2) + i,
                 y: Math.floor(600 / 24 / 2),
-                el: el
+                el: el,
+                dir: SnekDirection.Left,
             };
     
-            el.className = 'snekpart';
-            el.innerHTML = i == 0 ? 'H' : '=';
-            
             this.map.appendChild(el);
             this.snek.push(p);
         }
@@ -184,6 +200,22 @@ class SnekMap {
     public drawSnek() {
         for (let i = 0; i < this.snek.length; i++) {
             const p = this.snek[i];
+            
+            if (i == 0 || i == this.snek.length - 1) { // head
+                let style = 'snekpart ' + (i == 0 ? 'head ' : 'tail ');
+                switch (p.dir) {
+                    case SnekDirection.Down: style += 'down'; break;
+                    case SnekDirection.Up: style += 'up'; break;
+                    case SnekDirection.Left: style += 'left'; break;
+                    case SnekDirection.Right: style += 'right'; break;
+                }
+                p.el.className = style;
+            } else { // mid
+                let reverse = (p.dir == SnekDirection.Left || p.dir == SnekDirection.Right)
+                    ? '-reverse' : '';
+                p.el.className = 'snekpart mid' + reverse;
+            }
+
 
             this.movePart(p);
         }

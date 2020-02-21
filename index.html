@@ -20,6 +20,16 @@
                 border: 1px #000 solid;
             }
 
+            #score {
+                position: absolute;
+                background: #ccc;
+                top: 5px;
+                width: 600px;
+                height: 60px;
+                border: 1px #000 solid;
+                text-align: center;
+            }
+
             #food {
                 position: absolute;
                 width: 24px;
@@ -29,18 +39,37 @@
             }
 
             .snekpart {
-                border: 1px #000 solid;
                 position: absolute;
                 width: 22px;
                 height: 22px;
                 text-align: center;
                 vertical-align: middle;
-                font-size: 8px;
             }
+
+            .snekpart.head {
+                background-image: url('img/head.png');
+            }
+            .snekpart.mid {
+                background-image: url('img/mid.png');
+            }
+            .snekpart.tail {
+                background-image: url('img/tail.png');
+            }
+            
+            .snekpart.mid-reverse {
+                background-image: url('img/mid.png');
+                transform: rotate(90deg);
+            }
+
+            .snekpart.up { transform: rotate(180deg); }
+            .snekpart.down { transform: rotate(0deg); }
+            .snekpart.left { transform: rotate(90deg); }
+            .snekpart.right { transform: rotate(-90deg); }
         </style>
     </head>
     <body>
         <div id="snek">
+            <div id="score">test</div>
             <div id="food">🍕</div>
         </div>
         <script src="out/snake.js"></script>
