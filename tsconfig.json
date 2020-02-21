@@ -7,7 +7,7 @@
       "noUnusedParameters": true,
       "strictNullChecks": true,
       "skipLibCheck": true,
-      "outDir": "./out",
+      "outDir": "./dist/js",
       "target": "ES2015",
       "lib": ["es5", "es2015", "dom"],
       "types": [],

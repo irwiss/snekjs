@@ -1,0 +1,21 @@
+name: Build
+on: 
+  push:
+    branches:
+    - master
+env:
+  DOCKER_CLI_EXPERIMENTAL: enabled
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Build the Docker container image
+      run: docker build . --file Dockerfile --tag irwiss/snekjs:latest
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Push the image to DockerHub
+      run: docker push irwiss/snekjs:latest
